@@ -47,6 +47,31 @@ computers = pre_work(ranges_of_computers)
 print("For suggestions type '"+ blue(" info") + "'. For update info: '"+ blue("update") + "'.")
 print("Be aware, the game saves ONLY when you have to pay rent (after each week in game).\nYou may receive bonus money if your hacking remains unnoticed.(You don't make a mistake or do certain things: expose files, DDOS attack...etc.)\nIf you manage to get the target killed, you can avoid them noticing your hacking.")
 while Command != "exit":
+    if Money <= 0:
+        if Savings > 0:
+            clear_console()
+            Money = Savings
+            Savings = 0
+            print(f"{time_tag()} " + yellow("EMERGENCY money transfer due the the lack of money."))
+        else:
+            clear_console()
+            print("You have run out of money! Game over.")
+            time.sleep(6)
+            clear_console()
+            Money, Honor, Integrity, MAX_Integrity, survived_days, Number_OF_MALWARES, NUMBER_OF_BBRUTEF, NUMBER_OF_viruses, NUMBER_OF_DDoS, Number_OF_Decoders, Downloaded_Files, ranges_of_computers, Hostile_EASY_additional_integrity, Hostile_MEDIUM_additional_integrity, Hostile_HARD_additional_integrity, Savings = new_game(Money, Honor, Integrity, MAX_Integrity, survived_days, Number_OF_MALWARES, NUMBER_OF_BBRUTEF, NUMBER_OF_viruses, NUMBER_OF_DDoS, Number_OF_Decoders, Downloaded_Files, Hostile_EASY_additional_integrity, Hostile_MEDIUM_additional_integrity, Hostile_HARD_additional_integrity, ranges_of_computers, Savings)
+            print("New game started!\n\nSaving RECCOMENDED.")
+            break
+    elif Integrity <= 500:
+        clear_console()
+        print(f"{time_tag()} " + yellow("CRITICAL intterity level!"))
+    elif Integrity <= 0:
+        clear_console()
+        print("Your Integrity has reached 0! Game over.")
+        time.sleep(6)
+        clear_console()
+        Money, Honor, Integrity, MAX_Integrity, survived_days, Number_OF_MALWARES, NUMBER_OF_BBRUTEF, NUMBER_OF_viruses, NUMBER_OF_DDoS, Number_OF_Decoders, Downloaded_Files, ranges_of_computers, Hostile_EASY_additional_integrity, Hostile_MEDIUM_additional_integrity, Hostile_HARD_additional_integrity, Savings = new_game(Money, Honor, Integrity, MAX_Integrity, survived_days, Number_OF_MALWARES, NUMBER_OF_BBRUTEF, NUMBER_OF_viruses, NUMBER_OF_DDoS, Number_OF_Decoders, Downloaded_Files, Hostile_EASY_additional_integrity, Hostile_MEDIUM_additional_integrity, Hostile_HARD_additional_integrity, ranges_of_computers, Savings)
+        print("New game started!\n\nSaving RECCOMENDED.")
+        break
     Money = round(Money)
     print("\n--------------------------------------------\n" + yellow(f"Survived Days: {survived_days}\n"))
     if tracked_computer != None:
@@ -67,7 +92,7 @@ while Command != "exit":
         (Hostile_EASY_additional_integrity, Hostile_MEDIUM_additional_integrity, Hostile_HARD_additional_integrity) = add_Hostile_integrity(Hostile_EASY_additional_integrity, Hostile_MEDIUM_additional_integrity, Hostile_HARD_additional_integrity, survived_days)
     if Command == "new game":
         Money, Honor, Integrity, MAX_Integrity, survived_days, Number_OF_MALWARES, NUMBER_OF_BBRUTEF, NUMBER_OF_viruses, NUMBER_OF_DDoS, Number_OF_Decoders, Downloaded_Files, ranges_of_computers, Hostile_EASY_additional_integrity, Hostile_MEDIUM_additional_integrity, Hostile_HARD_additional_integrity, Savings = new_game(Money, Honor, Integrity, MAX_Integrity, survived_days, Number_OF_MALWARES, NUMBER_OF_BBRUTEF, NUMBER_OF_viruses, NUMBER_OF_DDoS, Number_OF_Decoders, Downloaded_Files, Hostile_EASY_additional_integrity, Hostile_MEDIUM_additional_integrity, Hostile_HARD_additional_integrity, ranges_of_computers, Savings)
-        print("New game started!")
+        print("New game started!\n\nSaving RECCOMENDED.")
     elif Command == "profile":
         tracked_computer = Profile(tracked_computer)
     elif Command == "stats":
@@ -98,22 +123,6 @@ while Command != "exit":
         Save_game(Username,Money,Honor,Integrity,MAX_Integrity,survived_days,Number_OF_MALWARES,NUMBER_OF_BBRUTEF,NUMBER_OF_viruses,NUMBER_OF_DDoS,Number_OF_Decoders,ranges_of_computers,Downloaded_Files,Hostile_EASY_additional_integrity,Hostile_MEDIUM_additional_integrity,Hostile_HARD_additional_integrity, Savings)
     elif Honor <= 0 and survived_days % 2 == 0:
        (Money, Honor, Integrity) = hack_attack(Money, Honor, Integrity, survived_days)
-    elif Money <= 0 and Savings <= 0:
-        clear_console()
-        print("You have run out of money! Game over.")
-        break
-    elif Money <= 0:
-        clear_console()
-        Money = Savings
-        Savings = 0
-        print(f"{time_tag()} " + yellow("EMERGENCY money transfer due the the lack of money."))
-    elif Integrity <= 500:
-        clear_console()
-        print(f"{time_tag()} " + yellow("CRITICAL intterity level!"))
-    elif Integrity <= 0:
-        clear_console()
-        print("Your Integrity has reached 0! Game over.")
-        break
     elif Command == "nmap":
         tracked_computer = track(computers)
         Current_TComp = tracked_computer
