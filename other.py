@@ -561,4 +561,3 @@ def rent_payment(Money, survived_days, ranges_of_computers):
     print(yellow(f"Rent: {full}\nRent base: {rent}\nRent bonus: {bonus}\nTaxes: {taxes}\nOther expenses: {others}\n\nYour current Money: {Money}$"))
     print("*****************************\n")
     time.sleep(3)
-    return Money
