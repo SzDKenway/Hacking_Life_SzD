@@ -82,7 +82,7 @@ while Command != "exit":
             break
     elif Integrity <= 500:
         clear_console()
-        print(f"{time_tag()} " + yellow("CRITICAL intterity level!"))
+        print(f"{time_tag()} " + yellow("CRITICAL integrity level!"))
     elif Integrity <= 0:
         clear_console()
         print("Your Integrity has reached 0! Game over.")

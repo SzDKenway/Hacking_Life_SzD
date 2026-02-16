@@ -68,7 +68,6 @@ def Save_game(Username, Money, Honor, Integrity, MAX_Integrity, survived_days,
             for f in Downloaded_Files:
                 file.write(f"{f.name},{f.kind},{getattr(f, 'DECRYPTED', False)},{getattr(f, 'Downloaded', False)},{getattr(f, 'bonus_type', '')}\n")
 
-        print("SAVE SUCCESS")
         clear_console()
         print(green("Game saved successfully."))
 
@@ -82,7 +81,7 @@ def Load_game(Username):
     print("Looking for:", file_path)
 
     if not os.path.exists(file_path):
-        print(" No save file found.")
+        print("\nNo save file found.")
         time.sleep(3)
         return None
 
@@ -120,8 +119,6 @@ def Load_game(Username):
                 f.bonus_type = bonus_type if bonus_type else None
                 Downloaded_Files.append(f)
 
-        print(" LOAD SUCCESS")
-
         return (Username, Money, Honor, Integrity, MAX_Integrity, survived_days,
                 Number_OF_MALWARES, NUMBER_OF_BBRUTEF, NUMBER_OF_viruses,
                 NUMBER_OF_DDoS, Number_OF_Decoders, ranges_of_computers,
@@ -130,7 +127,7 @@ def Load_game(Username):
                 Hostile_HARD_additional_integrity, Savings)
 
     except Exception as e:
-        print("Loading saved file failed.")
+        print("\nLoading saved file failed.")
         time.sleep(3)
         return None
 
