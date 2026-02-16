@@ -11,80 +11,31 @@ from var import *
 from other import *
 from missions import *
 
+# Load ALL variables from temporary file passed from main.py
+TEMP_FILE = os.path.join(os.path.dirname(__file__), "temp_tracked_computer.pkl")
 
-def run_hacker_terminal(tracked_computer, Integrity, NUMBER_OF_viruses,
-                        NUMBER_OF_DDoS, Number_OF_Decoders,
-                        Downloaded_Files, NUMBER_OF_BBRUTEF,
-                        Number_OF_MALWARES, Money, Honor, MAX_Integrity):
+if os.path.exists(TEMP_FILE):
+    with open(TEMP_FILE, "rb") as f:
+        (tracked_computer, Integrity, NUMBER_OF_viruses, NUMBER_OF_DDoS,
+         Number_OF_Decoders, Downloaded_Files, NUMBER_OF_BBRUTEF,
+         Number_OF_MALWARES, Money, Honor, MAX_Integrity) = pickle.load(f)
+else:
+    print("Error: No tracked computer found. Please track a computer in the main game first.")
+    sys.exit(1)
 
-    print("Opening hostile terminal in new window...")
-    time.sleep(1)
-
-    with open("hostile_save.pkl", "wb") as f:
-        pickle.dump((
-            tracked_computer,
-            Integrity,
-            NUMBER_OF_viruses,
-            NUMBER_OF_DDoS,
-            Number_OF_Decoders,
-            Downloaded_Files,
-            NUMBER_OF_BBRUTEF,
-            Number_OF_MALWARES,
-            Money,
-            Honor,
-            MAX_Integrity
-        ), f)
-
-    process = subprocess.Popen(
-        [sys.executable, "hostile"],
-        creationflags=subprocess.CREATE_NEW_CONSOLE
-    )
-
-    process.wait()
-
-    with open("hostile_save.pkl", "rb") as f:
-        result = pickle.load(f)
-
-    os.remove("hostile_save.pkl")
-
-    print("\nLogging out of hostile terminal...")
-    print(f"\nGoodbye, {result[0].UserName}.")
-    time.sleep(1)
-
-    return result
+# Call the hostile terminal and unpack all returned values
+(tracked_computer, Integrity, NUMBER_OF_viruses, NUMBER_OF_DDoS, Number_OF_Decoders, Downloaded_Files, NUMBER_OF_BBRUTEF, Number_OF_MALWARES, Money, Honor, MAX_Integrity) = Hostile_terminal(tracked_computer, Integrity, NUMBER_OF_viruses, NUMBER_OF_DDoS, Number_OF_Decoders, Downloaded_Files, NUMBER_OF_BBRUTEF, Number_OF_MALWARES, Money, Honor, MAX_Integrity)
 
 
-def run_hostile_mode():
-    with open("hostile_save.pkl", "rb") as f:
-        (tracked_computer,
-         Integrity,
-         NUMBER_OF_viruses,
-         NUMBER_OF_DDoS,
-         Number_OF_Decoders,
-         Downloaded_Files,
-         NUMBER_OF_BBRUTEF,
-         Number_OF_MALWARES,
-         Money,
-         Honor,
-         MAX_Integrity) = pickle.load(f)
+# Save ALL modified variables back to the file for main.py to read
+data_to_save = (tracked_computer, Integrity, NUMBER_OF_viruses, NUMBER_OF_DDoS,
+                Number_OF_Decoders, Downloaded_Files, NUMBER_OF_BBRUTEF,
+                Number_OF_MALWARES, Money, Honor, MAX_Integrity)
 
-    from function import Hostile_terminal
+with open(TEMP_FILE, "wb") as f:
+    pickle.dump(data_to_save, f)
 
-    result = Hostile_terminal(
-        tracked_computer,
-        Integrity,
-        NUMBER_OF_viruses,
-        NUMBER_OF_DDoS,
-        Number_OF_Decoders,
-        Downloaded_Files,
-        NUMBER_OF_BBRUTEF,
-        Number_OF_MALWARES,
-        Money,
-        Honor,
-        MAX_Integrity
-    )
-
-    with open("hostile_save.pkl", "wb") as f:
-        pickle.dump(result, f)
-
-    sys.exit()
+print("\nLogging out of hostile terminal...")
+print(f"\nGoodbye, {tracked_computer.UserName}.")
+time.sleep(1)
+sys.exit(0)
