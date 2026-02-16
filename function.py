@@ -20,10 +20,11 @@ def clear_console():
         os.system('clear')
 
 def start_hostile_terminal():
-    subprocess.call(
-        ["cmd.exe", "/c", sys.executable, "hackT.py"],
-        creationflags=subprocess.CREATE_NEW_CONSOLE
-    )
+    """
+    Initiates the hostile/hacker terminal in a new CMD window.
+    """
+    from hackT import run_hacker_terminal
+    run_hacker_terminal()
 
 def chance(percent: float) -> bool:
    return random.random() < (percent / 100)

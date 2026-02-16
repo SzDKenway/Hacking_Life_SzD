@@ -78,7 +78,7 @@ def Save_game(Username, Money, Honor, Integrity, MAX_Integrity, survived_days,
 def Load_game(Username):
 
     file_path = os.path.join(SAVE_DIR, f"{Username}_save.txt")
-    print("Looking for:", file_path)
+    print("\nLooking for:", file_path)
 
     if not os.path.exists(file_path):
         print("\nNo save file found.")

@@ -11,8 +11,15 @@ from var import *
 from other import *
 from function import *
 from missions import *
-# from hackT import *
 
+# Check if this instance is running in hostile/hacker terminal mode
+if "hostile" in sys.argv:
+    # Import and run hostile terminal mode, then exit
+    from hackT import run_hostile_mode
+    run_hostile_mode()
+    sys.exit(0)
+
+# Normal game mode continues below
 Username = ""
 Command = ""
 Command_Amount = 0
@@ -140,7 +147,7 @@ while Command != "exit":
         Money = rent_payment(Money, survived_days, ranges_of_computers)
         paidRent = True
         Save_game(Username,Money,Honor,Integrity,MAX_Integrity,survived_days,Number_OF_MALWARES,NUMBER_OF_BBRUTEF,NUMBER_OF_viruses,NUMBER_OF_DDoS,Number_OF_Decoders,ranges_of_computers,Downloaded_Files,Hostile_EASY_additional_integrity,Hostile_MEDIUM_additional_integrity,Hostile_HARD_additional_integrity, Savings)
-    elif Honor <= 0 and survived_days % 2 == 0:
+    elif Honor <= 0 and survived_days % 2 == 0 and Command not in ["info", "save", "stats", "clear", "exit"]:
        (Money, Honor, Integrity) = hack_attack(Money, Honor, Integrity, survived_days)
     elif Command == "nmap":
         tracked_computer = track(computers)
