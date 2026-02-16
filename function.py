@@ -7,6 +7,7 @@ import sys
 
 from datetime import datetime
 
+
 #---------------------------------------------------------------------
 from var import *
 from other import *
@@ -19,11 +20,139 @@ def clear_console():
     else:
         os.system('clear')
 
-def start_hostile_terminal():
-    subprocess.call(
-        ["cmd.exe", "/c", sys.executable, "hackT.py"],
-        creationflags=subprocess.CREATE_NEW_CONSOLE
-    )
+def hack(tracked_computer, Integrity, NUMBER_OF_viruses, NUMBER_OF_DDoS,
+         Number_OF_Decoders, Downloaded_Files, NUMBER_OF_BBRUTEF,
+         Number_OF_MALWARES, Money, Honor, MAX_Integrity):
+
+    Chose = ""
+    success = False
+
+    choice = input("\nAre you sure you want to hack this computer? (y/n): ").strip().lower()
+    while choice not in ['y', 'n']:
+        choice = input(red("Invalid input. Please enter 'y' or 'n': ")).strip().lower()
+
+    if choice == 'y':
+        clear_console()
+
+        for i in range(6):
+            if i == 1:
+                print(f"{time_tag()} Attempting to hack {tracked_computer.UserName}'s computer...")
+                time.sleep(1)
+            elif i == 2:
+                print(f"\nTarget PC: {tracked_computer.IP}\n")
+                time.sleep(1)
+            elif i == 3:
+                print(f"{time_tag()} Initiating remote connection...")
+            elif i == 4:
+                print(f"\n{time_tag()} Bypassing firewall...")
+                time.sleep(2)
+
+        if Integrity * 1.2 > tracked_computer.Comp_Integrity:
+            while Chose not in ["y", "n", "back"]:
+                Chose = input(
+                    f"\nDo you want to crack the password MANUALLY?\n"
+                    f" - 'y' = manual cracking\n"
+                    f" - 'n' = use BruteForce (Current amount: {NUMBER_OF_BBRUTEF})\n"
+                    f" - 'back' = Cancel\n\nCONFIRM: "
+                ).strip().lower()
+
+                # ===== MANUAL CRACK =====
+                if Chose == "y":
+                    if PassWord(tracked_computer, Integrity):
+                        success = True
+                        clear_console()
+
+                        print(green("Password CRACKED."))
+                        print(green("Firewall Penetrated."))
+                        print(green("Remote access GRANTED."))
+                        time.sleep(1)
+
+                        print("\nOpening HACKER terminal...\n")
+
+                        from hackT import run_hacker_terminal
+
+                        (tracked_computer, Integrity, NUMBER_OF_viruses, NUMBER_OF_DDoS,
+                         Number_OF_Decoders, Downloaded_Files, NUMBER_OF_BBRUTEF,
+                         Number_OF_MALWARES, Money, Honor, MAX_Integrity) = run_hacker_terminal(
+                            tracked_computer, Integrity, NUMBER_OF_viruses, NUMBER_OF_DDoS,
+                            Number_OF_Decoders, Downloaded_Files, NUMBER_OF_BBRUTEF,
+                            Number_OF_MALWARES, Money, Honor, MAX_Integrity
+                        )
+
+                        clear_console()
+                        print("Exiting HACKER terminal...")
+                        time.sleep(1.5)
+
+                        return (tracked_computer, Integrity, NUMBER_OF_viruses, NUMBER_OF_DDoS,
+                                Number_OF_Decoders, Downloaded_Files, NUMBER_OF_BBRUTEF,
+                                Number_OF_MALWARES, Money, Honor, MAX_Integrity)
+
+                    else:
+                        print(yellow("You FAILED to crack the password"))
+                        print(yellow("Access DENIED"))
+
+                # ===== BRUTEFORCE =====
+                elif Chose == "n":
+                    if NUMBER_OF_BBRUTEF <= 0:
+                        print(yellow("You don't have any BruteForce programs left."))
+                        time.sleep(1)
+                        continue
+
+                    NUMBER_OF_BBRUTEF -= 1
+                    success = True
+                    clear_console()
+
+                    print(f"Target IP: {tracked_computer.IP}")
+                    print(f"{time_tag()} Running bruteforce.exe...")
+                    time.sleep(2)
+
+                    if tracked_computer.Comp_Integrity * 1.5 <= Integrity:
+                        print(green("Password CRACKED."))
+                        print(green("Firewall Penetrated."))
+                        print(green("Remote access GRANTED."))
+                        time.sleep(1)
+
+                        print("\nOpening HACKER terminal...\n")
+
+                        from hackT import run_hacker_terminal
+
+                        (tracked_computer, Integrity, NUMBER_OF_viruses, NUMBER_OF_DDoS,
+                         Number_OF_Decoders, Downloaded_Files, NUMBER_OF_BBRUTEF,
+                         Number_OF_MALWARES, Money, Honor, MAX_Integrity) = run_hacker_terminal(
+                            tracked_computer, Integrity, NUMBER_OF_viruses, NUMBER_OF_DDoS,
+                            Number_OF_Decoders, Downloaded_Files, NUMBER_OF_BBRUTEF,
+                            Number_OF_MALWARES, Money, Honor, MAX_Integrity
+                        )
+
+                        clear_console()
+                        print("Exiting HACKER terminal...")
+                        time.sleep(1.5)
+
+                    else:
+                        tracked_computer.NoticeHacking = True
+                        Integrity -= random.randint(1, 5) * 100
+                        print(yellow("BRUTEFORCE failed"))
+                        print(yellow("Intrusion DETECTED!"))
+
+                    return (tracked_computer, Integrity, NUMBER_OF_viruses, NUMBER_OF_DDoS,
+                            Number_OF_Decoders, Downloaded_Files, NUMBER_OF_BBRUTEF,
+                            Number_OF_MALWARES, Money, Honor, MAX_Integrity)
+
+                elif Chose == "back":
+                    print("Password cracking was cancelled.")
+                    break
+
+        else:
+            print(yellow("Hacking failed. Target PC integrity too high."))
+            tracked_computer.NoticeHacking = True
+
+    else:
+        print("HACKING was cancelled.")
+
+    return (tracked_computer, Integrity, NUMBER_OF_viruses, NUMBER_OF_DDoS,
+            Number_OF_Decoders, Downloaded_Files, NUMBER_OF_BBRUTEF,
+            Number_OF_MALWARES, Money, Honor, MAX_Integrity)
+
 
 def chance(percent: float) -> bool:
    return random.random() < (percent / 100)
@@ -476,166 +605,6 @@ def send_malware(tracked_computer, Number_OF_MALWARES, Integrity):
         return tracked_computer, Number_OF_MALWARES, Integrity
     else:
         print(red("Invalid."))
-
-def hack(tracked_computer, Integrity, NUMBER_OF_viruses, NUMBER_OF_DDoS,
-         Number_OF_Decoders, Downloaded_Files, NUMBER_OF_BBRUTEF,
-         Number_OF_MALWARES, Money, Honor, MAX_Integrity):
-    Chose = ""
-    success = False
-    choice = input("\nAre you sure you want to hack this computer? (y/n): ").strip().lower()
-    while choice not in ['y', 'n']:
-        choice = input(red("Invalid input. Please enter 'y' or 'n': ")).strip().lower()
-
-    if choice == 'y':
-        clear_console()
-        for i in range(6):
-            if i == 1:
-                print(f"{time_tag()} Attempting to hack {tracked_computer.UserName}'s computer" + "." * 3)
-                time.sleep(1)
-            elif i == 2:
-                print(f"\nTarget PC: {tracked_computer.IP}\n")
-                time.sleep(1)
-            elif i == 3:
-                print(f"{time_tag()} Initiating remote connection" + "." * i)
-            elif i == 4:
-                print(f"\n{time_tag()} Bypassing firewall" + "." * i)
-                time.sleep(2)
-
-        if Integrity*1.2 > tracked_computer.Comp_Integrity:
-            while Chose not in ["y", "n", "back"]:
-                Chose = input(
-                    f"\nDo you want to crack the password MANUALLY?\n"
-                    f" - 'y' = manual cracking\n"
-                    f" - 'n' = you will use BruteForce (Current amount: {NUMBER_OF_BBRUTEF})\n"
-                    f" - 'back' = Cancel\n\nCONFIRM: "
-                ).strip().lower()
-
-                if Chose == "y":
-                    if PassWord(tracked_computer, Integrity):
-                        success = True
-                        # tracked_computer.Comp_Integrity -= 300
-                        clear_console()
-                        for i in range(4):
-                            if i == 1:
-                                print(f"{time_tag()} " + green(f"You have CRACKED the password."))
-                            if i == 2:
-                                print(f"\n{time_tag()} " + green(f"Firewall Penetrated."))
-                            if i == 3:
-                                print(f"\n{time_tag()} " + green(f"Remote access GRANTED."))
-                            time.sleep(1.2)
-                        print("\nOpening HACKER terminal...\n")
-                        # Save ALL variables to temporary file for hackT.py
-                        import pickle
-                        TEMP_FILE = os.path.join(os.path.dirname(__file__), "temp_tracked_computer.pkl")
-                        data_to_save = (tracked_computer, Integrity, NUMBER_OF_viruses, NUMBER_OF_DDoS,
-                                        Number_OF_Decoders, Downloaded_Files, NUMBER_OF_BBRUTEF,
-                                        Number_OF_MALWARES, Money, Honor, MAX_Integrity)
-                        with open(TEMP_FILE, "wb") as f:
-                            pickle.dump(data_to_save, f)
-                        start_hostile_terminal()
-                        # Load ALL modified variables back from hackT.py
-                        if os.path.exists(TEMP_FILE):
-                            with open(TEMP_FILE, "rb") as f:
-                                (tracked_computer, Integrity, NUMBER_OF_viruses, NUMBER_OF_DDoS,
-                                 Number_OF_Decoders, Downloaded_Files, NUMBER_OF_BBRUTEF,
-                                 Number_OF_MALWARES, Money, Honor, MAX_Integrity) = pickle.load(f)
-                            os.remove(TEMP_FILE)
-                            clear_console()
-                            print("Exiting HACKER terminal...")
-                            time.sleep(1.5)
-                        return (tracked_computer, Integrity, NUMBER_OF_viruses, NUMBER_OF_DDoS,
-                                Number_OF_Decoders, Downloaded_Files, NUMBER_OF_BBRUTEF,
-                                Number_OF_MALWARES, Money, Honor, MAX_Integrity)
-                    else:
-                        print(yellow("You FAILED to crack the password"))
-                        print(f"{time_tag()}" + yellow(" Access DENIED"))
-
-                elif Chose == "n":
-                    if NUMBER_OF_BBRUTEF <= 0:
-                        print(yellow("You don't have any BruteForce programs left."))
-                        time.sleep(1.2)
-                        continue
-
-                    NUMBER_OF_BBRUTEF -= 1
-                    # tracked_computer.Comp_Integrity -= 300
-                    success = True
-                    clear_console()
-
-                    for i in range(4):
-                        if i == 1:
-                            print(f"Target IP: {tracked_computer.IP}")
-                        if i == 2:
-                            print(f"\n{time_tag()} Using BRUTEFORCE to crack {tracked_computer.UserName}'s password" + "..." )
-                        if i == 3:
-                            print(f"\n{time_tag()} Running bruteforce.exe...")
-                        time.sleep(1.5)
-                    
-                    if tracked_computer.Comp_Integrity*1.5 <= Integrity:
-                        for i in range(4):
-                            if i == 1:
-                                print(f"\n{time_tag()} " + green(f"You have CRACKED the password."))
-                            if i == 2:
-                                print(f"\n{time_tag()} " + green(f"Firewall Penetrated."))
-                            if i == 3:
-                                print(f"\n{time_tag()} " + green(f"Remote access GRANTED."))
-                            time.sleep(1)
-                        print("\nOpening HACKER terminal...\n")
-
-                        # Save ALL variables to temporary file for hackT.py
-                        import pickle
-                        TEMP_FILE = os.path.join(os.path.dirname(__file__), "temp_tracked_computer.pkl")
-                        data_to_save = (tracked_computer, Integrity, NUMBER_OF_viruses, NUMBER_OF_DDoS,
-                                        Number_OF_Decoders, Downloaded_Files, NUMBER_OF_BBRUTEF,
-                                        Number_OF_MALWARES, Money, Honor, MAX_Integrity)
-                        with open(TEMP_FILE, "wb") as f:
-                            pickle.dump(data_to_save, f)
-                        start_hostile_terminal()
-                        # Load ALL modified variables back from hackT.py
-                        if os.path.exists(TEMP_FILE):
-                            with open(TEMP_FILE, "rb") as f:
-                                (tracked_computer, Integrity, NUMBER_OF_viruses, NUMBER_OF_DDoS,
-                                Number_OF_Decoders, Downloaded_Files, NUMBER_OF_BBRUTEF,
-                                Number_OF_MALWARES, Money, Honor, MAX_Integrity) = pickle.load(f)
-                            os.remove(TEMP_FILE)
-                            clear_console()
-                            print("Exiting HACKER terminal...\n")
-                            time.sleep(1.5)
-                    else:
-                        tracked_computer.NoticeHacking = True
-                        Integrity -= random.randint(1,5)*100
-                        print(yellow("BRUTEFORCE failed to crack the password"))
-                        print(f"{time_tag()} "+yellow("Access DENIED")) 
-                        print(f"\n{time_tag()} "+yellow("Intrusion DETECTED!\n")) 
-                    return (tracked_computer, Integrity, NUMBER_OF_viruses, NUMBER_OF_DDoS,
-                            Number_OF_Decoders, Downloaded_Files, NUMBER_OF_BBRUTEF,
-                            Number_OF_MALWARES, Money, Honor, MAX_Integrity)
-
-                elif Chose == "back":
-                    print("Password cracking was cancelled.")
-                    break
-
-        else:
-            print(yellow("Hacking failed. Target PC's Integrity is too high."))
-            print(f"{time_tag()}" + yellow(" Access DENIED"))
-            if tracked_computer.Located != True:
-                tracked_computer.NoticeHacking = True
-                print(f"\n{time_tag()}" + yellow("Intrusion DETECTED!\n"))
-
-        if not success:
-            Integrity -= random.randint(1,5)*100
-            print("Your pc has been damaged by the counter programs.")
-            print("HACKING failed.")
-            if tracked_computer.Located != True:
-                tracked_computer.NoticeHacking = True
-                print(f"\n{time_tag()}" + yellow("Intrusion DETECTED!\n"))
-
-    elif choice == 'n':
-        print("HACKING was cancelled.")
-
-    return (tracked_computer, Integrity, NUMBER_OF_viruses, NUMBER_OF_DDoS,
-            Number_OF_Decoders, Downloaded_Files, NUMBER_OF_BBRUTEF,
-            Number_OF_MALWARES, Money, Honor, MAX_Integrity)
-
 
 def Hostile_terminal(tracked_computer, Integrity, NUMBER_OF_viruses, NUMBER_OF_DDoS, Number_OF_Decoders, Downloaded_Files, NUMBER_OF_BBRUTEF, Number_OF_MALWARES, Money, Honor, MAX_Integrity):
     hack_terminal = ""

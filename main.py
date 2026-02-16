@@ -5,7 +5,14 @@ import time
 import threading
 import sys
 
+import sys
 from datetime import datetime
+
+# If started with the 'hostile' argument, run hostile mode only
+if len(sys.argv) > 1 and sys.argv[1] == "hostile":
+    from hackT import run_hostile_mode
+    run_hostile_mode()
+    sys.exit(0)
 
 from var import *
 from other import *
